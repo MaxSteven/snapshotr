@@ -659,7 +659,7 @@ if nuke.GUI is True:
                 # NK button
                 tmpB = r'<td class="vert-align"><button type="button" class="btn btn-default has-popover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="'
                 btnCode = tmpB + \
-                    str(roots[0]) + snap + "/" + snap + \
+                    str(roots[0]) + "/" + snap + "/" + snap + \
                     ".nk" + '">nk</button></td>'
                 page.add(btnCode)
 
