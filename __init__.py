@@ -23,7 +23,7 @@ import pwd
 import threading
 from PIL import Image
 from PySide import QtCore
-from sys import path
+from sys import path, platform
 
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
@@ -803,8 +803,12 @@ if nuke.GUI is True:
                     except:
                         print "\n! pageFile.writelines(self.updateWebView()) writelines call failed\n"
             elif knob is self.ffButton:
-                ffCommand = "firefox -new-tab " + pFile
-                print "\n~ Opening " + poFile + ".html in a new tab"
+                if platform == "linux" or platform == "linux2":
+                    ffCommand = "firefox -new-tab " + pFile
+                    print "\n~ Opening " + poFile + ".html in firefox"
+                else:
+                    ffCommand = "open -a safari " + pFile
+                    print "\n~ Opening " + poFile + ".html in safari"
                 os.system(ffCommand)
             elif knob is self.instaButton:
                 if self.instaSnap() > 0:
