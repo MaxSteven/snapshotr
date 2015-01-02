@@ -32,7 +32,7 @@ By default it is dockable, but can be dragged out and used as a modal window:
 * __Comment field__ — Self-descriptive. Color can be specified as a hashtag (#green, #blue, etc)  
 * __Instant__ — Make snapshot using screenshot of current viewer, perceptually instant for a user  
 * __Full__ — Make full-res snapshot, image is rendered in background from selected node  
-* __Open__ — Open new firefox tab with web-view  
+* __Open__ — Open new browser tab with web-view  
 * __Autosnap__ – Create automatic instant snapshot every XX minutes  
 * __Mark node__ — Mark selected node with color and current timestamp
 
@@ -55,7 +55,7 @@ After writing files to the filesystem they are chmod'ed to 0444.
 ![script_editor](https://cloud.githubusercontent.com/assets/300146/5579110/65096d9c-9070-11e4-91ab-7eb2c63b778a.png)
 
 Snapshotr output reasonable amount of information to the Nuke script editor.  
-If you want more (mostly for debugging), change ```DEV``` variable to 1 or 2 (last one will output _a lot_ of things).
+If you want more, change ```DEV``` variable to 1 or 2 (last one will output _a lot_).
 
 ## Performance
 
