@@ -21,6 +21,7 @@ import re
 import time
 import pwd
 import threading
+import webbrowser
 from PIL import Image
 from PySide import QtCore
 from sys import path, platform
@@ -803,13 +804,8 @@ if nuke.GUI is True:
                     except:
                         print "\n! pageFile.writelines(self.updateWebView()) writelines call failed\n"
             elif knob is self.ffButton:
-                if platform == "linux" or platform == "linux2":
-                    ffCommand = "firefox -new-tab " + pFile
-                    print "\n~ Opening " + poFile + ".html in firefox"
-                else:
-                    ffCommand = "open -a safari " + pFile
-                    print "\n~ Opening " + poFile + ".html in safari"
-                os.system(ffCommand)
+                webbrowser.open('file://' + os.path.realpath(pFile), new=2, autoraise=True)
+                print "\n~ Opening " + poFile + ".html in a new tab..."
             elif knob is self.instaButton:
                 if self.instaSnap() > 0:
                     self.instaSnap()
