@@ -44,7 +44,7 @@ Here is an example of web page generated each time user manually initiate snapsh
 ![web-view-new](https://cloud.githubusercontent.com/assets/300146/5579102/40f3f062-9070-11e4-8da9-5dc5aa995981.jpg)
 
 By default snapshots are sorted from new to old, this can be changed by clicking "Time created" column header.  
-Clicking "nk" button user can see a box with path to the .nk script
+Clicking "nk" button user can see a box with path to the .nk script. Clicking the image thumbnail, full-res version will be opened (limited to the screen width).
 
 ## File structure
 ![snaps_filestruct](https://cloud.githubusercontent.com/assets/300146/5579347/ce3d1aea-9073-11e4-90e8-3c916391991e.png)
