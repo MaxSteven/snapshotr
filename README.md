@@ -45,7 +45,7 @@ By default snapshots are sorted from new to old, this can be changed by clicking
 Clicking "nk" button user can see a box with path to the .nk script
 
 ## File structure
-![snaps](https://cloud.githubusercontent.com/assets/300146/5579240/704df450-9072-11e4-8120-32b590113fa4.png)
+![snaps_filestruct](https://cloud.githubusercontent.com/assets/300146/5579347/ce3d1aea-9073-11e4-90e8-3c916391991e.png)
 
 Snapshots created in "snaps" directory that is relative to the current script path.  
 So, if script is /projects/xxx/abc001.user.v01.nk, then snapshots will be stored in /projects/xxx/snaps/  
