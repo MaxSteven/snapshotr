@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------
+# --------------------! DEV BRANCH !----------------------------
 # Snapshotr: Nuke snapshots manager
 #
 # Andrew Savchenko © 2014
@@ -10,9 +10,10 @@
 #
 # Developed on OS X and RHEL, should work on random *nix system
 #
-# --------------------------------------------------------------
-__version__ = "0.1.8"
-__release__ = True
+# --------------------! DEV BRANCH !----------------------------
+
+__version__ = "0.1.9"
+__release__ = False
 
 import nuke
 import nukescripts
