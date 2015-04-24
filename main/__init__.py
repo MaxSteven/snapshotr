@@ -30,7 +30,7 @@ snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 from main import markup, scandir
 
-if nuke.GUI is True:
+if nuke.GUI:
     class ssPanel(nukescripts.PythonPanel):
 
         def __init__(self):
@@ -845,7 +845,7 @@ if nuke.GUI is True:
 else:
     pass
 
-if nuke.GUI is True:
+if nuke.GUI:
     menu = nuke.menu("Pane")
     menu.addCommand("Snapshotr", addSSpanel)
     nukescripts.registerPanel("uk.co.thefoundry.ssPanel", addSSpanel)
