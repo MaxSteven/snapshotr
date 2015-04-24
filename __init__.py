@@ -80,12 +80,12 @@ if nuke.GUI is True:
             re7='(v)'                               # v
             re8='(\\d+)'                            # Major version number
             re9='(\\.)'                             # .
-            re8='(\\d+)'                            # Minor version number
-            re9='(\\.)'                             # .
-            re10='(nk)'                             # nk
-            rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10,re.IGNORECASE|re.DOTALL)
+            re10='(\\d+)'                           # Minor version number
+            re11='(\\.)'                            # .
+            re12='(nk)'                             # nk
+            rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12,re.IGNORECASE|re.DOTALL)
             if rg.match(scriptName) is None:
-                nuke.message("Please save your script in the following format:\nshot.task.artist.v00.nk")
+                nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
 
 
             #
