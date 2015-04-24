@@ -28,7 +28,7 @@ from sys import path, platform
 
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
-from . import markup, scandir
+from main import markup, scandir
 
 if nuke.GUI is True:
     class ssPanel(nukescripts.PythonPanel):
@@ -71,25 +71,26 @@ if nuke.GUI is True:
             scriptPath = nuke.toNode('root').knob('name').value()
             scriptName = scriptPath.split("/")[-1]
 
-            re1='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'  # Shot
-            re2='(\\.)'                             # .
-            re3='((?:[a-z][a-z]+))'                 # Task
-            re4='(\\.)'                             # .
-            re5='((?:[a-z][a-z]+))'                 # Artist
-            re6='(\\.)'                             # .
-            re7='(v)'                               # v
-            re8='(\\d+)'                            # Major version number
-            re9='(\\.)'                             # .
-            re10='(\\d+)'                           # Minor version number
-            re11='(\\.)'                            # .
-            re12='(nk)'                             # nk
-            rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12,re.IGNORECASE|re.DOTALL)
-            if rg.match(scriptName) is None:
-                nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
+            def check_script_name():
+                re1='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'  # Shot
+                re2='(\\.)'                             # .
+                re3='((?:[a-z][a-z]+))'                 # Task
+                re4='(\\.)'                             # .
+                re5='((?:[a-z][a-z]+))'                 # Artist
+                re6='(\\.)'                             # .
+                re7='(v)'                               # v
+                re8='(\\d+)'                            # Major version number
+                re9='(\\.)'                             # .
+                re10='(\\d+)'                           # Minor version number
+                re11='(\\.)'                            # .
+                re12='(nk)'                             # nk
+                rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12,re.IGNORECASE|re.DOTALL)
+                if rg.match(scriptName) is None:
+                    nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
 
 
             #
-            # Create auto snapshot every 60 minutes
+            # Create auto snapshot every 60 minutes by default
             #
             def snapAutosave():
                 try:
