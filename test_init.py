@@ -1,9 +1,3 @@
-class dummy():
-    pass
-
-nuke = dummy()
-nuke.GUI = True
-
 import main as ss
 import os
 
@@ -14,4 +8,4 @@ class TestInit:
         assert os.path.isfile(ss.snapr_path + "/main/scandir.py")
 
     def test_script_name_checking(self):
-        pass
+        assert ss.ssPanel.check_script('blah') is None # Here it fails

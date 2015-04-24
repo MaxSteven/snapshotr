@@ -71,7 +71,7 @@ if nuke.GUI:
             scriptPath = nuke.toNode('root').knob('name').value()
             scriptName = scriptPath.split("/")[-1]
 
-            def check_script_name():
+            def check_script(name):
                 re1='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'  # Shot
                 re2='(\\.)'                             # .
                 re3='((?:[a-z][a-z]+))'                 # Task
@@ -85,8 +85,11 @@ if nuke.GUI:
                 re11='(\\.)'                            # .
                 re12='(nk)'                             # nk
                 rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12,re.IGNORECASE|re.DOTALL)
-                if rg.match(scriptName) is None:
-                    nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
+                result = rg.match(name)
+                return result
+
+            if check_script(scriptName) is None:
+                nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
 
 
             #
