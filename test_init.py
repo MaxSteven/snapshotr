@@ -1,4 +1,5 @@
 import main as ss
+from main.snapshotr_panel import ssPanel
 import os
 
 class TestInit:
