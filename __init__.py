@@ -23,8 +23,6 @@ from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 
-# --------------------
-
 if nuke.GUI:
     def addSSpanel():
         import snapshotr_panel

@@ -15,16 +15,17 @@
 import nuke
 import nukescripts
 import os
-import re
 import time
 import threading
 import webbrowser
 from PIL import Image
+# noinspection PyUnresolvedReferences
 from PySide import QtCore
 from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 import snapshotr_webView
+import snapshotr_common as cmn
 
 class ssPanel(nukescripts.PythonPanel):
 
@@ -67,24 +68,7 @@ class ssPanel(nukescripts.PythonPanel):
         scriptPath = nuke.toNode('root').knob('name').value()
         scriptName = scriptPath.split("/")[-1]
 
-        def check_script(name):
-            re1='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'  # Shot
-            re2='(\\.)'                             # .
-            re3='((?:[a-z][a-z]+))'                 # Task
-            re4='(\\.)'                             # .
-            re5='((?:[a-z][a-z]+))'                 # Artist
-            re6='(\\.)'                             # .
-            re7='(v)'                               # v
-            re8='(\\d+)'                            # Major version number
-            re9='(\\.)'                             # .
-            re10='(\\d+)'                           # Minor version number
-            re11='(\\.)'                            # .
-            re12='(nk)'                             # nk
-            rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12,re.IGNORECASE|re.DOTALL)
-            result = rg.match(name)
-            return result
-
-        if check_script(scriptName) is None:
+        if cmn.check_script(scriptName) is None:
             nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
 
 

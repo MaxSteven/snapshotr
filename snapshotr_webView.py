@@ -20,7 +20,7 @@ import pwd
 from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
-import markup, scandir, snapshotr_panel
+import markup, scandir
 
 def updateWebView(debug=0, s_dirs=None):
     genStart = time.time()
