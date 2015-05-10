@@ -73,83 +73,16 @@ class ssPanel(nukescripts.PythonPanel):
 
 
         #
-        # Create auto snapshot every 60 minutes by default
+        # Create auto snapshot, every 60 minutes by default
         #
         def snapAutosave():
             try:
-                scriptPath = nuke.toNode('root').knob('name').value()
-                scriptName = scriptPath.split("/")[-1]
-                timestamp = time.strftime("%d-%m-%Y") + '_' + time.strftime("%H-%M")
-                snapPath = self.snapsDir + '/' + scriptName + '_' + timestamp
-                snapScriptName = snapPath + "/" + scriptName + '_' + timestamp + '.nk'
-                snapImageFile = snapPath + "/" + scriptName + '_' + timestamp + '.jpg'
-                snapCommentFile = snapPath + "/" + scriptName + '_' + timestamp+ '.txt'
+                c_var = cmn.init_common_vars(snapsDir=self.snapsDir)
                 print "\n~ autosaving snapshot..."
-
-                #  Check if snapshots root exists and create _current_ autosnap directory
-                #
-                if self.rootDir != "" and self.snapsDir != "":
-                    if not os.path.exists(self.snapsDir):
-                        os.makedirs(self.snapsDir)
-                        print "\n~ Created root snapshots dir: " + self.snapsDir
-                else:
-                    nuke.message("Please save your script")
-                    return 0
-                if not os.path.exists(snapPath):
-                    os.makedirs(snapPath)
-                    print "\n ------------ Autosnap @ " + time.strftime("%H:%M") + " ------------"
-                    print "\n~ Created autosnap dir: " + snapPath
-                else:
-                    print "\n! Autosnap failed, directory exists"
-                    return 0
-
-                # Write script with a proper naming
-                #
-                try:
-                    tmpScriptPath = scriptPath
-                    print "\n~ Writing script (auto): " + str(snapScriptName)
-                    nuke.scriptSaveAs(str(snapScriptName))
-                    os.chmod(snapScriptName, 0444)
-                    rootNode = nuke.toNode('root')
-                    rootNode.knob('name').setValue(tmpScriptPath)
-                    del tmpScriptPath
-                except:
-                    nuke.message("\n! Can't save the script, no autosnap created")
-                    return 0
-
-                # Write comment
-                #
-                try:
-                    snapCommentFileObj = open(snapCommentFile, "w+")
-                    commentText = "#autosnap"
-                    snapCommentFileObj.write(commentText)
-                    snapCommentFileObj.close()
-                    os.chmod(snapCommentFile, 0444)
-                    print "\n~ Writing text comment (auto): " + snapCommentFile
-                except:
-                    print "\n! Writing comment failed"
-                    return 0
-
-                # Write autosnap image
-                #
-                print "\n~ Writing autosnap screenshot: " + str(snapImageFile)
-                if self.DEV > 0:
-                    print "\n~ ---- Calling from: " + str(threading.current_thread())
-                    for x in threading.enumerate():
-                        print "* " + str(x)
-
-                def captr():
-                    if self.DEV > 0:
-                        print "* executeInMainThread(): " + str(threading.current_thread())
-                    nuke.activeViewer().node().capture(snapImageFile)
-                nuke.executeInMainThread(captr)
-                im = Image.open(snapImageFile)
-                imSize = ('', 100)
-                im.thumbnail(imSize, Image.ANTIALIAS)
-                imgPathThumb = str(snapImageFile).replace('jpg', 'thumb') + '.jpg'
-                im.save(imgPathThumb, 'JPEG')
-                os.chmod(snapImageFile, 0444)
-                os.chmod(imgPathThumb, 0444)
+                cmn.create_snapshots_root(rootDir=self.rootDir, snapsDir=self.snapsDir, snapPath=c_var["snapPath"])
+                cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"])
+                cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"])
+                cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
             finally:
                 timer = int(self.timerValue.value()) * 60000
                 QtCore.QTimer.singleShot(timer, snapAutosave)
@@ -163,17 +96,13 @@ class ssPanel(nukescripts.PythonPanel):
     def instaSnap(self):
         scriptPath = nuke.toNode('root').knob('name').value()
         scriptName = scriptPath.split("/")[-1]
-        timestamp = time.strftime(
-            "%d-%m-%Y") + '_' + time.strftime("%H-%M")
+        timestamp = time.strftime("%d-%m-%Y") + '_' + time.strftime("%H-%M")
         nodeLabel = "<b>SNAP</b><br />" + str(time.strftime("%d-%m-%Y")).replace(
             "-", ".") + ' ' + str(time.strftime("%H-%M")).replace("-", ":")
         snapPath = self.snapsDir + '/' + scriptName + '_' + timestamp
-        snapScriptName = snapPath + "/" + \
-                         scriptName + '_' + timestamp + '.nk'
-        snapImageFile = snapPath + "/" + \
-                        scriptName + '_' + timestamp + '.jpg'
-        snapCommentFile = snapPath + "/" + \
-                          scriptName + '_' + timestamp + '.txt'
+        snapScriptName = snapPath + "/" + scriptName + '_' + timestamp + '.nk'
+        snapImageFile = snapPath + "/" + scriptName + '_' + timestamp + '.jpg'
+        snapCommentFile = snapPath + "/" + scriptName + '_' + timestamp + '.txt'
         currentFrame = int(nuke.frame())
         fakeFrameRange = str(currentFrame) + "-" + str(currentFrame)
         writeUniqueName = "tmp_Snapshotr" + timestamp
