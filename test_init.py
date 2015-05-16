@@ -2,7 +2,7 @@ import os
 from . import snapr_path
 import snapshotr_common as cmn
 
-class TestInit:
+class TestCommons:
     def test_correct_installation(self):
         assert os.path.exists(snapr_path)
         assert os.path.isfile(snapr_path + "/markup.py")
@@ -14,4 +14,6 @@ class TestInit:
     def test_script_name_checking(self):
         assert cmn.check_script("ss0001.comp.username.v01.00.nk") is not None
         assert cmn.check_script("ss0001.comp-user.v01.00.nk") is None
+
+
 
