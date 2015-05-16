@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+# --------------------! DEV BRANCH !----------------------------
+# Snapshotr: Nuke snapshots manager
+#
+# Andrew Savchenko © 2014
+# art@artaman.net
+#
+# Attribution 4.0 International (CC BY 4.0)
+# http://creativecommons.org/licenses/by/4.0/
+#
+# Developed on OS X and RHEL, should work on random *nix system
+#
+# --------------------! DEV BRANCH !----------------------------
+
 import re
 import nuke
 import time
@@ -24,6 +38,7 @@ def check_script(name):
     result = rg.match(name)
     return result
 
+
 def init_common_vars(snapsDir=None):
     """
     Initialize common variables used in other functions
@@ -49,6 +64,7 @@ def init_common_vars(snapsDir=None):
                  "currentFrame":currentFrame, "fakeFrameRange":fakeFrameRange, "writeUniqueName":writeUniqueName,
                  "nodeLabel":nodeLabel})
     return all_vars
+
 
 def create_snapshot_dirs(rootDir=None, snapsDir=None, snapPath=None, markNode=None):
     """
@@ -82,6 +98,7 @@ def create_snapshot_dirs(rootDir=None, snapsDir=None, snapPath=None, markNode=No
             nuke.message("'Mark node' is checked, but no node selected")
             raise BaseException
 
+
 def create_snapshot_script(scriptPath=None, snapScriptName=None):
     """
     Writes snapshot .nk script
@@ -100,6 +117,7 @@ def create_snapshot_script(scriptPath=None, snapScriptName=None):
         nuke.message("\n! Can't save the script, no snapshot created")
         raise BaseException
 
+
 def create_snapshot_comment(snapCommentFile=None):
     """
     Writes .txt file with comment provided by user
@@ -114,6 +132,7 @@ def create_snapshot_comment(snapCommentFile=None):
         print "\n~ Writing text comment: " + snapCommentFile
     except:
         print "\n! Writing comment failed"
+
 
 def create_snapshot_screenshot(DEV=None, snapImageFile=None):
     """
@@ -140,6 +159,7 @@ def create_snapshot_screenshot(DEV=None, snapImageFile=None):
     os.chmod(imgPathThumb, 0444)
     print "\n~ Writing autosnap screenshot: " + str(snapImageFile)
 
+
 def label_node(markNode=None, nodeLabel=None):
     """
     Mark selected node with color and label with timestamp
@@ -154,6 +174,7 @@ def label_node(markNode=None, nodeLabel=None):
         except ValueError:
             nuke.message("'Mark node' is checked, but no node selected")
             raise BaseException
+
 
 def copy_viewer_input(node=None):
     """
@@ -170,6 +191,7 @@ def copy_viewer_input(node=None):
     [x.setSelected(False) for x in nuke.selectedNodes()]
     [x.setSelected(True) for x in orig]
     return new_node
+
 
 def create_snapshot_fullres(snapImageFile=None, writeUniqueName=None, fakeFrameRange=None):
     """
@@ -239,3 +261,13 @@ def create_snapshot_fullres(snapImageFile=None, writeUniqueName=None, fakeFrameR
         nuke.delete(tmpViewerInput)
     if is_vp_valid:
         nuke.delete(tmpViewerProcess)
+
+
+def write_html(pFile=None, html=None):
+    """
+    :param pFile: Full path to .html
+    :param html: content to write
+    """
+    pageFile = open(pFile, "w+")
+    pageFile.writelines(html)
+    pageFile.close()

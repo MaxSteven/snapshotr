@@ -15,10 +15,7 @@
 import nuke
 import nukescripts
 import os
-import time
-import threading
 import webbrowser
-from PIL import Image
 # noinspection PyUnresolvedReferences
 from PySide import QtCore
 from sys import path
@@ -29,7 +26,7 @@ import snapshotr_common as cmn
 
 class ssPanel(nukescripts.PythonPanel):
 
-    DEV = 1
+    DEV = 2
     rootDir = nuke.script_directory()
     snapsDir = rootDir + "/snaps"
 
@@ -40,27 +37,23 @@ class ssPanel(nukescripts.PythonPanel):
             'Snapshotr',
             'uk.co.thefoundry.ssPanel')
 
-        DEV = self.DEV
-        rootDir = self.rootDir
-        snapsDir = self.snapsDir
-
-        if DEV > 0:
+        if self.DEV > 0:
             print "\n* Debug mode ON"
-            print "* rootDir inside ssPanel __init__ = " + rootDir
-            print "* snapsDir inside ssPanel __init__ = " + snapsDir
+            print "* rootDir inside ssPanel __init__ = " + self.rootDir
+            print "* snapsDir inside ssPanel __init__ = " + self.snapsDir
 
-        self.snapButton = nuke.PyScript_Knob('Full')
-        self.instaButton = nuke.PyScript_Knob('Instant')
-        self.ffButton = nuke.PyScript_Knob('Open')
+        self.btn_snap_fullres = nuke.PyScript_Knob('Full')
+        self.btn_snap_instant = nuke.PyScript_Knob('Instant')
+        self.btn_open_webview = nuke.PyScript_Knob('Open')
         self.commentField = nuke.String_Knob('Comment:')
         self.divider = nuke.Text_Knob('')
         self.markNode = nuke.Boolean_Knob('Mark node ')
         self.timerValue = nuke.Int_Knob('Autosnap: ')
 
         self.addKnob(self.commentField)
-        self.addKnob(self.instaButton)
-        self.addKnob(self.snapButton)
-        self.addKnob(self.ffButton)
+        self.addKnob(self.btn_snap_instant)
+        self.addKnob(self.btn_snap_fullres)
+        self.addKnob(self.btn_open_webview)
         self.addKnob(self.timerValue)
         self.addKnob(self.divider)
         self.addKnob(self.markNode)
@@ -93,7 +86,7 @@ class ssPanel(nukescripts.PythonPanel):
         snapAutosave()
 
 
-    def instaSnap(self):
+    def snap_instant(self):
         """
         Create instant snapshot of current active viewer
         """
@@ -106,7 +99,7 @@ class ssPanel(nukescripts.PythonPanel):
         cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
 
 
-    def ssSnap(self):
+    def snap_fullres(self): # TODO: Add detection if running from viewer
         """
         Create full-res snapshot via BG render
         """
@@ -118,68 +111,32 @@ class ssPanel(nukescripts.PythonPanel):
         cmn.create_snapshot_fullres(snapImageFile=c_var["snapImageFile"], writeUniqueName=c_var["writeUniqueName"],
                                     fakeFrameRange=c_var["fakeFrameRange"])
         cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"])
-    #
-    # Create web view
-    #
-    updateWebView = snapshotr_webView.updateWebView(debug=DEV, s_dirs=snapsDir)
 
-    #
-    # What to do if specific knob changed
-    #
+
     def knobChanged(self, knob):
-
-        updateWebView = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
-
+        """
+        :param knob: certain knob within panel
+        """
         scriptPath = nuke.toNode('root').knob('name').value()
         scriptName = scriptPath.split("/")[-1]
         pFile = str(scriptName).split(".")
         pFile = "_".join(pFile[0:2])
-        poFile = pFile
         pFile = self.snapsDir + "/" + pFile + ".html"
-        if knob is self.snapButton:
-            if self.ssSnap() > 0:
-                self.ssSnap()
-            else:
-                try:
-                    updateWebView()
-                except:
-                    x = updateWebView()
-                    print x
-                    print "\n! self.updateWebView() call failed"
-                pageFile = open(pFile, "w+")
-                try:
-                    pageFile.writelines(updateWebView())
-                    pageFile.close()
-                except:
-                    print "\n! pageFile.writelines(updateWebView()) writelines call failed\n"
-        elif knob is self.ffButton:
+
+        if knob is self.btn_snap_fullres:
+            self.snap_fullres()
+            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
+            cmn.write_html(pFile=pFile, html=webview_html)
+        elif knob is self.btn_snap_instant:
+            self.snap_instant()
+            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
+            cmn.write_html(pFile=pFile, html=webview_html)
+        elif knob is self.btn_open_webview:
             webbrowser.open('file://' + os.path.realpath(pFile), new=2, autoraise=True)
-            print "\n~ Opening " + poFile + ".html in a new tab..."
-        elif knob is self.instaButton:
-            self.instaSnap()
-            try:
-                updateWebView()
-            except:
-                x = updateWebView()
-                print x
-                print "\n! updateWebView() call failed"
-            pageFile = open(pFile, "w+")
-            try:
-                pageFile.writelines(updateWebView())
-                pageFile.close()
-            except:
-                print "\n! pageFile.writelines(updateWebView()) writelines call failed\n"
         elif knob is self.timerValue:
             if self.timerValue.value() < 10:
                 self.timerValue.setValue(10)
             elif self.timerValue.value() > 60:
                 self.timerValue.setValue(60)
-            else:
-                pass
-        elif knob is self.markNode or self.commentField:
-            pass
         else:
-            self.notCatched()
-
-    def notCatched(self):
-        print "\n! Unknown knob changed"
+            pass

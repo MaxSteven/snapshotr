@@ -13,7 +13,6 @@
 # --------------------! DEV BRANCH !----------------------------
 
 import nuke
-import nukescripts
 import os
 import time
 import pwd
@@ -23,6 +22,9 @@ path.append(snapr_path)
 import markup, scandir
 
 def updateWebView(debug=0, s_dirs=None):
+    """
+    :rtype : hmtl code of web-view as list object
+    """
     genStart = time.time()
     page = markup.page()
 
@@ -44,7 +46,6 @@ def updateWebView(debug=0, s_dirs=None):
     page.init(css=css, title=title, header=header)
 
     # Snaps root dir, list of snaps
-    print debug
     snapsIterator = scandir.walk(s_dirs)
     dirList = []
     for directory in snapsIterator:
@@ -314,7 +315,7 @@ def updateWebView(debug=0, s_dirs=None):
     page.add(genText)
     page.p('&nbsp;')
 
-    # Return page as tuple line-by-line
+    # Return page as list line-by-line
     page = str(page)
     pageList = page.split("\n")
     returnList = []
