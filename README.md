@@ -36,7 +36,7 @@ By default it is dockable, but it can be dragged out and used as a modal window:
 ![snapshotr_main](https://cloud.githubusercontent.com/assets/300146/5570169/83b73a34-8fb8-11e4-8f45-42d25097a31b.png)
 * __Comment field__ — Self-descriptive. Color can be specified as a hashtag (#green, #blue, etc)
 * __Instant__ — Makes snapshot using screenshot of current viewer, perceptually instant for a user
-* __Full__ — Makes full-res snapshot, image is rendered in background from the selected node
+* __Full__ — Makes full-res snapshot, image is rendered in background from the selected node.  
 Custom LUT's are handled correctly. Whatever you have as input\_process or/and viewer_process
 will be converted to sRGB prior to render
 * __Open__ — Opens new browser tab with web-view
