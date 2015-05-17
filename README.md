@@ -61,7 +61,7 @@ After writing files to the filesystem they are chmod'ed to 0444.
 ## Debugging
 ![v020_debug](https://cloud.githubusercontent.com/assets/300146/7670615/bd4a68e2-fcdd-11e4-940d-21498f9686ab.png)
 
-Snapshotr outputs reasonable amount of information to the Nuke script editor.
+Snapshotr outputs reasonable amount of information to the Nuke script editor.  
 If you want more, change ```DEV``` variable to 1 or 2 (last one will output a lot).
 
 ## Performance
