@@ -76,7 +76,8 @@ class ssPanel(nukescripts.PythonPanel):
                 print "\n~ autosaving snapshot..."
                 cmn.create_snapshot_dirs(rootDir=self.rootDir, snapsDir=self.snapsDir,
                                          snapPath=c_var["snapPath"], markNode=self.markNode)
-                cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"])
+                cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"],
+                                           upversion=False)
                 cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText="#autosnap")
                 cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
             finally:
@@ -93,7 +94,8 @@ class ssPanel(nukescripts.PythonPanel):
         c_var = cmn.init_common_vars(snapsDir=self.snapsDir)
         cmn.create_snapshot_dirs(rootDir=self.rootDir, snapsDir=self.snapsDir,
                                  snapPath=c_var["snapPath"],markNode=self.markNode)
-        cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"])
+        cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"],
+                                   upversion=True)
         cmn.label_node(markNode=self.markNode, nodeLabel=c_var["nodeLabel"])
         cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText=self.commentField.getText())
         cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
@@ -106,7 +108,8 @@ class ssPanel(nukescripts.PythonPanel):
         c_var = cmn.init_common_vars(snapsDir=self.snapsDir)
         cmn.create_snapshot_dirs(rootDir=self.rootDir, snapsDir=self.snapsDir,
                                  snapPath=c_var["snapPath"],markNode=self.markNode)
-        cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"])
+        cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"],
+                                   upversion=True)
         cmn.label_node(markNode=self.markNode, nodeLabel=c_var["nodeLabel"])
         cmn.create_snapshot_fullres(snapImageFile=c_var["snapImageFile"], writeUniqueName=c_var["writeUniqueName"],
                                     fakeFrameRange=c_var["fakeFrameRange"])

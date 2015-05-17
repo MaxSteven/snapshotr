@@ -107,6 +107,11 @@ def create_snapshot_script(scriptPath=None, snapScriptName=None, upversion=None)
     """
     try:
         tmpScriptPath = scriptPath
+        if upversion:
+            up_minor_version = int(scriptPath.split("/")[-1].split(".")[-2]) + 1
+            up_script_name = ".".join(tmpScriptPath.split("/")[-1].split(".")[:-2]) + "." \
+                             + str(up_minor_version).zfill(2) + ".nk"
+            tmpScriptPath = "/".join(tmpScriptPath.split("/")[:-1]) + "/" + up_script_name
         print "\n~ Writing script: " + str(snapScriptName)
         nuke.scriptSaveAs(str(snapScriptName))
         os.chmod(snapScriptName, 0444)
