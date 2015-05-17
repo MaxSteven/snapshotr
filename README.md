@@ -2,7 +2,7 @@
 This is a Nuke snapshot manager which is used to make script versioning more straightforward.
 
 ## What is snapshot?
-It is a backup of script at the specific time with user comment and screenshot.
+It is a backup of script at the specific time with user comment and screenshot.  
 All snapshots are presented in user friendly web-interface.
 
 ## Installation
@@ -25,8 +25,8 @@ else:
 ```
 
 ## File versioning
-This tool assumes that artist uses the following convention in naming scripts: *shot.user.task.v01.00.nk*.
-In case file is saved with incorrect name, it will display a warning message and panel will not load
+This tool assumes that artist uses the following convention in naming scripts: *shot.user.task.v01.00.nk*  
+In case file is saved with incorrect name, it will display a warning message and panel will not load  
 Each snapshot increases minor version by one (e.g v01.00 --> v01.01)
 
 ## Nuke panel
@@ -54,15 +54,15 @@ Clicking "nk" button user can see a box with path to the .nk script. Clicking th
 ## File structure
 ![v020_filelist](https://cloud.githubusercontent.com/assets/300146/7670600/30f23a6e-fcdd-11e4-870e-fcff797d8232.png)
 
-Snapshots created in "snaps" directory that is relative to the current script path.
-So, if script is /projects/xxx/abc001.john.comp.v01.00.nk, then snapshots will be stored in /projects/xxx/snaps/
-After writing files to the filesystem they are chmod'ed to 0444.
+Snapshots created in "snaps" directory that is relative to the current script path  
+So, if script is /projects/xxx/abc001.john.comp.v01.00.nk, then snapshots will be stored in /projects/xxx/snaps/  
+After writing files to the filesystem they are chmod'ed to 0444  
 
 ## Debugging
 ![v020_debug](https://cloud.githubusercontent.com/assets/300146/7670615/bd4a68e2-fcdd-11e4-940d-21498f9686ab.png)
 
-Snapshotr outputs reasonable amount of information to the Nuke script editor.  
-If you want more, change ```DEV``` variable to 1 or 2 (last one will output a lot).
+Snapshotr outputs reasonable amount of information to the Nuke script editor  
+If you want more, change ```DEV``` variable to 1 or 2 (last one will output a lot)
 
 ## Performance
 On typical workstation this tool parses ~200 snapshots to the web-view per second.
