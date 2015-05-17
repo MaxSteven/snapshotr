@@ -104,6 +104,7 @@ def create_snapshot_script(scriptPath=None, snapScriptName=None, upversion=None)
     Writes snapshot .nk script
     :param scriptPath: Path to the snapshot directory where .nk is stored
     :param snapScriptName: Absolute path to the .nk
+    :param upversion: if True, minor version +1 (e.g v01.00 --> v01.01)
     """
     try:
         tmpScriptPath = scriptPath
@@ -117,7 +118,7 @@ def create_snapshot_script(scriptPath=None, snapScriptName=None, upversion=None)
         os.chmod(snapScriptName, 0444)
         rootNode = nuke.toNode('root')
         rootNode.knob('name').setValue(tmpScriptPath)
-        del tmpScriptPath
+        nuke.scriptSave()
     except:
         nuke.message("\n! Can't save the script, no snapshot created")
         raise BaseException
