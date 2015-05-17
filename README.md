@@ -36,8 +36,7 @@ By default it is dockable, but it can be dragged out and used as a modal window:
 ![snapshotr_main](https://cloud.githubusercontent.com/assets/300146/5570169/83b73a34-8fb8-11e4-8f45-42d25097a31b.png)
 * __Comment field__ — Self-descriptive. Color can be specified as a hashtag (#green, #blue, etc)
 * __Instant__ — Makes snapshot using screenshot of current viewer, perceptually instant for a user
-* __Full__ — Makes full-res snapshot, image is rendered in background from the selected node.  
-Custom LUT's are handled correctly. Whatever you have as input\_process or/and viewer_process
+* __Full__ — Makes full-res snapshot, image is rendered in background from the selected node. Custom LUT's are handled correctly. Whatever you have as input\_process or/and viewer_process
 will be converted to sRGB prior to render
 * __Open__ — Opens new browser tab with web-view
 * __Autosnap__ – Creates automatic instant snapshot every XX minutes
@@ -48,8 +47,7 @@ Here is an example of a web page generated each time user manually initiated sna
 
 ![v020_webview](https://cloud.githubusercontent.com/assets/300146/7670598/dbf51c0c-fcdc-11e4-9b2d-af5d08e9703c.png)
 
-By default snapshots are sorted from new to old, this can be changed by clicking "Time created" column header  
-Clicking "nk" button user can see a box with path to the .nk script. Clicking the image thumbnail, full-res version will be opened (limited to the screen width).
+By default snapshots are sorted from new to old, this can be changed by clicking "Time created" column header. Clicking "nk" button user can see a box with path to the .nk script. Clicking the image thumbnail, full-res version will be opened (limited to the screen width).
 
 ## File structure
 ![v020_filelist](https://cloud.githubusercontent.com/assets/300146/7670600/30f23a6e-fcdd-11e4-870e-fcff797d8232.png)
@@ -64,4 +62,4 @@ Snapshotr outputs reasonable amount of information to the Nuke script editor
 If you want more, change ```DEV``` variable to 1 or 2 (last one will output a lot)
 
 ## Performance
-On typical workstation this tool parses ~200 snapshots to the web-view per second.
+On typical workstation this tool parses ~200 snapshots to the web-view per second
