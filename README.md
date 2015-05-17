@@ -62,4 +62,4 @@ Snapshotr outputs reasonable amount of information to the Nuke script editor
 If you want more, change ```DEV``` variable to 1 or 2 (last one will output a lot)
 
 ## Performance
-On typical workstation this tool parses ~200 snapshots to the web-view per second
+To be tested with v0.2.0
