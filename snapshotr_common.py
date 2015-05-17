@@ -205,7 +205,15 @@ def create_snapshot_fullres(snapImageFile=None, writeUniqueName=None, fakeFrameR
     :param writeUniqueName: name of temporarily Write node
     :param fakeFrameRange: current frame X represented as "X-X"
     """
-    orig = nuke.selectedNodes()[0]
+    try:
+        initial_node = nuke.selectedNodes()[0]
+        if initial_node.Class() == "Viewer":
+            initial_node.setSelected(False)
+            initial_node = initial_node.dependencies()[-1]
+            initial_node.setSelected(True)
+    except IndexError:
+        nuke.message("Select node from which to render full-res snapshot")
+        raise BaseException
     ip_node = nuke.activeViewer().node().knob('input_process_node').value()
     viewerInput = nuke.toNode(ip_node)
     viewerProcess = nuke.ViewerProcess.node()
@@ -219,9 +227,9 @@ def create_snapshot_fullres(snapImageFile=None, writeUniqueName=None, fakeFrameR
         root.end()
         tmpViewerProcess = nuke.toNode(newVp.name())
         tmpViewerProcess.setInput(0, nuke.selectedNode())
-        orig.setSelected(False)
+        initial_node.setSelected(False)
         tmpViewerProcess.setSelected(True)
-        orig = nuke.selectedNodes()[0]
+        initial_node = nuke.selectedNodes()[0]
     else:
         print "\n! No valid IP attached to the Viewer, going on..."
     if 'Node' in str(type(viewerInput)) or 'Gizmo' in str(type(viewerInput)):
@@ -229,7 +237,7 @@ def create_snapshot_fullres(snapImageFile=None, writeUniqueName=None, fakeFrameR
         newIp = copy_viewer_input(viewerInput)
         tmpViewerInput = nuke.toNode(newIp.name())
         tmpViewerInput.setInput(0, nuke.selectedNode())
-        orig.setSelected(False)
+        initial_node.setSelected(False)
         tmpViewerInput.setSelected(True)
     else:
         print "\n! No valid VI attached to the Viewer, going on..."

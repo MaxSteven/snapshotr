@@ -26,7 +26,7 @@ import snapshotr_common as cmn
 
 class ssPanel(nukescripts.PythonPanel):
 
-    DEV = 2
+    DEV = 1
     rootDir = nuke.script_directory()
     snapsDir = rootDir + "/snaps"
 
