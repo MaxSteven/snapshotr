@@ -1,3 +1,7 @@
+#
+# This should be launched from the python interpreter that is shipped with Nuke
+#
+
 import os
 from . import snapr_path
 import snapshotr_common as cmn

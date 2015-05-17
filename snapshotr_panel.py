@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# --------------------! DEV BRANCH !----------------------------
+# ------------------------------------------------
 # Snapshotr: Nuke snapshots manager
 #
-# Andrew Savchenko © 2014
+# Andrew Savchenko © 2014-2015
 # art@artaman.net
 #
 # Attribution 4.0 International (CC BY 4.0)
@@ -10,7 +10,10 @@
 #
 # Developed on OS X and RHEL, should work on random *nix system
 #
-# --------------------! DEV BRANCH !----------------------------
+# ------------------------------------------------
+
+__version__ = "0.2.0"
+__release__ = True
 
 import nuke
 import nukescripts
@@ -26,7 +29,7 @@ import snapshotr_common as cmn
 
 class ssPanel(nukescripts.PythonPanel):
 
-    DEV = 1
+    DEV = 0
     rootDir = nuke.script_directory()
     snapsDir = rootDir + "/snaps"
 
@@ -101,7 +104,7 @@ class ssPanel(nukescripts.PythonPanel):
         cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
 
 
-    def snap_fullres(self): # TODO: Add detection if running from viewer
+    def snap_fullres(self):
         """
         Create full-res snapshot via BG render
         """

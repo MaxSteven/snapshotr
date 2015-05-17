@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# --------------------! DEV BRANCH !----------------------------
+# ------------------------------------------------
 # Snapshotr: Nuke snapshots manager
 #
-# Andrew Savchenko © 2014
+# Andrew Savchenko © 2014-2015
 # art@artaman.net
 #
 # Attribution 4.0 International (CC BY 4.0)
@@ -10,7 +10,15 @@
 #
 # Developed on OS X and RHEL, should work on random *nix system
 #
-# --------------------! DEV BRANCH !----------------------------
+# ------------------------------------------------
+
+__version__ = "0.2.0"
+__release__ = True
+
+#
+# Please note, that while this module is marked as "ready for release",
+# webView is #1 candidate to be refactored for the next version.
+#
 
 import nuke
 import os

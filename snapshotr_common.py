@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# --------------------! DEV BRANCH !----------------------------
+# ------------------------------------------------
 # Snapshotr: Nuke snapshots manager
 #
-# Andrew Savchenko © 2014
+# Andrew Savchenko © 2014-2015
 # art@artaman.net
 #
 # Attribution 4.0 International (CC BY 4.0)
@@ -10,13 +10,23 @@
 #
 # Developed on OS X and RHEL, should work on random *nix system
 #
-# --------------------! DEV BRANCH !----------------------------
+# ------------------------------------------------
+
+__version__ = "0.2.0"
+__release__ = True
 
 import re
 import nuke
 import time
 import os
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    try:
+        import Image
+    except ImportError:
+        nuke.message("Can't import PIL module, please run 'pip install Pillow'")
+        raise BaseException
 
 def check_script(name):
     """
@@ -74,11 +84,6 @@ def create_snapshot_dirs(rootDir=None, snapsDir=None, snapPath=None, markNode=No
     :param snapPath: Path to directory where snapshot .nk is stored
     """
     try:
-        if markNode.value() is True:
-                nuke.selectedNode()
-                if len(nuke.selectedNodes("Viewer")) > 0:
-                    nuke.message("Can't mark Viewer, select regular node")
-                    raise BaseException
         if rootDir != "" and snapsDir != "":
             if not os.path.exists(snapsDir):
                 os.makedirs(snapsDir)
@@ -172,6 +177,11 @@ def label_node(markNode=None, nodeLabel=None):
     :param nodeLabel: timestamp label
     """
     if markNode.value() is True:
+        initial_node = nuke.selectedNodes()[0]
+        if initial_node.Class() == "Viewer":
+            initial_node.setSelected(False)
+            initial_node = initial_node.dependencies()[-1]
+            initial_node.setSelected(True)
         try:
             nuke.selectedNode()
             nuke.selectedNode().knob('tile_color').setValue(112233)
