@@ -1,13 +1,13 @@
 ## What is it?
-This is a Nuke snapshot manager which is used to make script versioning more straightforward.
+This is a Nuke snapshot manager which is used to make script versioning more straightforward
 
 ## What is snapshot?
-It is a backup of script at the specific time with user comment and screenshot.  
-All snapshots are presented in user friendly web-interface.
+It is a backup of script at the specific time with user comment and screenshot  
+All snapshots are presented in user friendly web-interface
 
 ## Installation
 1. `cd ~/.nuke && git clone https://github.com/artaman/snapshotr.git`
-2. Open `~/.nuke/init.py` with your favourite editor.
+2. Open `~/.nuke/init.py` with your favourite editor
 3. Add the following code:
 
 ```python
@@ -48,14 +48,13 @@ Here is an example of a web page generated each time user manually initiated sna
 
 ![v020_webview](https://cloud.githubusercontent.com/assets/300146/7670598/dbf51c0c-fcdc-11e4-9b2d-af5d08e9703c.png)
 
-By default snapshots are sorted from new to old, this can be changed by clicking "Time created" column header.
+By default snapshots are sorted from new to old, this can be changed by clicking "Time created" column header  
 Clicking "nk" button user can see a box with path to the .nk script. Clicking the image thumbnail, full-res version will be opened (limited to the screen width).
 
 ## File structure
 ![v020_filelist](https://cloud.githubusercontent.com/assets/300146/7670600/30f23a6e-fcdd-11e4-870e-fcff797d8232.png)
 
-Snapshots created in "snaps" directory that is relative to the current script path  
-So, if script is /projects/xxx/abc001.john.comp.v01.00.nk, then snapshots will be stored in /projects/xxx/snaps/  
+Snapshots created in "snaps" directory that is relative to the current script path. So, if script is /projects/xxx/abc001.john.comp.v01.00.nk, then snapshots will be stored in /projects/xxx/snaps/   
 After writing files to the filesystem they are chmod'ed to 0444  
 
 ## Debugging
