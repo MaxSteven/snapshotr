@@ -99,7 +99,7 @@ def create_snapshot_dirs(rootDir=None, snapsDir=None, snapPath=None, markNode=No
             raise BaseException
 
 
-def create_snapshot_script(scriptPath=None, snapScriptName=None):
+def create_snapshot_script(scriptPath=None, snapScriptName=None, upversion=None):
     """
     Writes snapshot .nk script
     :param scriptPath: Path to the snapshot directory where .nk is stored
@@ -118,14 +118,13 @@ def create_snapshot_script(scriptPath=None, snapScriptName=None):
         raise BaseException
 
 
-def create_snapshot_comment(snapCommentFile=None):
+def create_snapshot_comment(snapCommentFile=None, commentText=None):
     """
     Writes .txt file with comment provided by user
     :param snapCommentFile: Absolute path to the .txt
     """
     try:
         snapCommentFileObj = open(snapCommentFile, "w+")
-        commentText = "#autosnap"
         snapCommentFileObj.write(commentText)
         snapCommentFileObj.close()
         os.chmod(snapCommentFile, 0444)

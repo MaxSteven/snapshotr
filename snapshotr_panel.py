@@ -77,7 +77,7 @@ class ssPanel(nukescripts.PythonPanel):
                 cmn.create_snapshot_dirs(rootDir=self.rootDir, snapsDir=self.snapsDir,
                                          snapPath=c_var["snapPath"], markNode=self.markNode)
                 cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"])
-                cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"])
+                cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText="#autosnap")
                 cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
             finally:
                 timer = int(self.timerValue.value()) * 60000
@@ -95,7 +95,7 @@ class ssPanel(nukescripts.PythonPanel):
                                  snapPath=c_var["snapPath"],markNode=self.markNode)
         cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"])
         cmn.label_node(markNode=self.markNode, nodeLabel=c_var["nodeLabel"])
-        cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"])
+        cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText=self.commentField.getText())
         cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
 
 
@@ -110,7 +110,7 @@ class ssPanel(nukescripts.PythonPanel):
         cmn.label_node(markNode=self.markNode, nodeLabel=c_var["nodeLabel"])
         cmn.create_snapshot_fullres(snapImageFile=c_var["snapImageFile"], writeUniqueName=c_var["writeUniqueName"],
                                     fakeFrameRange=c_var["fakeFrameRange"])
-        cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"])
+        cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText=self.commentField.getText())
 
 
     def knobChanged(self, knob):

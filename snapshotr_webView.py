@@ -59,7 +59,7 @@ def updateWebView(debug=0, s_dirs=None):
     roots = dirList[0]
     if len(roots) < 1:
         print "\n! JohnnieWalker doesn't walk, here is what we've got: " + roots
-        raise
+        raise BaseException
     rootDir = str(roots[0])
     scriptPath = nuke.toNode('root').knob('name').value()
     scriptName = scriptPath.split("/")[-1]
@@ -79,7 +79,7 @@ def updateWebView(debug=0, s_dirs=None):
     userList = []
 
     # because os.stat() inside class crashes Nuke,
-    # we are constructing bicycle here
+    # we are adding this (non-optimal) hack
     c = 0
     for ROOT, DIR, FILES in scandir.walk(s_dirs):
         for dir in DIR:
@@ -162,7 +162,7 @@ def updateWebView(debug=0, s_dirs=None):
     for snap in snapsList[0]:
         # Check for tags and output proper <tr> class
         cmntFilePath = str(roots[0]) + "/" + snap + "/" + snap + ".txt"
-        if os.path.exists(cmntFilePath) is True:
+        if os.path.exists(cmntFilePath):
             pass
         else:
             with open(cmntFilePath, "w+") as cmnt:
@@ -184,7 +184,7 @@ def updateWebView(debug=0, s_dirs=None):
                 page.tr(class_="autosnap")
             else:
                 page.tr(class_="active")
-        # Multiple tags. Fuck it and mark as grey
+        # Multiple tags detected, fuck it and mark as grey
         elif len(cmntTagChecker) > 1:
             page.tr(class_="active")
         else:
@@ -216,7 +216,7 @@ def updateWebView(debug=0, s_dirs=None):
         page.add(usrCode)
 
         # Version
-        version = snap.split(".")[-2]
+        version = ".".join(snap.split(".")[3:5])
         verCode = '<td class="vert-align" style="color: #5c6266;">' + \
                   version + '</td>'
         page.add(verCode)
@@ -231,7 +231,7 @@ def updateWebView(debug=0, s_dirs=None):
             class_='vert-align',
             style="color: #7A8288;")
 
-        # Replace with tag-removed
+        # Strip '#tag' and output comment text
         if len(cmntTagChecker) > 0:
             for x in cmntTagChecker:
                 cmntList.remove(x)
