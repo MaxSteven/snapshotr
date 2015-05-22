@@ -118,6 +118,19 @@ class ssPanel(nukescripts.PythonPanel):
                                     fakeFrameRange=c_var["fakeFrameRange"])
         cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText=self.commentField.getText())
 
+    def prevent_doubleclick(self, time=None):
+        self.commentField.setValue("")
+        self.commentField.setEnabled(False)
+        self.btn_open_webview.setEnabled(False)
+        self.btn_snap_instant.setEnabled(False)
+        self.btn_snap_fullres.setEnabled(False)
+        def unlock():
+            self.commentField.setEnabled(True)
+            self.btn_open_webview.setEnabled(True)
+            self.btn_snap_instant.setEnabled(True)
+            self.btn_snap_fullres.setEnabled(True)
+        QtCore.QTimer.singleShot(time, unlock)
+
 
     def knobChanged(self, knob):
         """
@@ -133,10 +146,12 @@ class ssPanel(nukescripts.PythonPanel):
             self.snap_fullres()
             webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
             cmn.write_html(pFile=pFile, html=webview_html)
+            self.prevent_doubleclick(time=2000)
         elif knob is self.btn_snap_instant:
             self.snap_instant()
             webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
             cmn.write_html(pFile=pFile, html=webview_html)
+            self.prevent_doubleclick(time=2000)
         elif knob is self.btn_open_webview:
             webbrowser.open('file://' + os.path.realpath(pFile), new=2, autoraise=True)
         elif knob is self.timerValue:
