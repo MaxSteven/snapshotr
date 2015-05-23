@@ -3,6 +3,7 @@ import hashlib
 import os
 import time
 from urllib2 import urlopen
+import json
 from distutils.version import StrictVersion
 from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
@@ -19,6 +20,13 @@ known_modules = {"__init__.py":"d0be737ae58694404a019d52eef22a2c249e9671a8fad41e
 "test_init.py":"e9441574ec8df74423805a208a57c652d879ead7110aa10cc8ba5f5d8e863a33",
 "markup.py":"757e192986642f72cc06f9239711754ac2be1211b3849a12e2438ed58cc77db4",
 "scandir.py":"8b449ac6173f02643761a2d618dfaa928cbbf29f3e679e03fb149e6c047c2562"}
+
+
+def generate_response(type=None):
+    if type == "https":
+        return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
+    if type == "json":
+        return urlopen("https://api.github.com/repos/artaman/snapshotr/releases")
 
 
 def update_message():
@@ -47,7 +55,7 @@ def check_hashes():
 
 def backup_current_version():
     """
-    :return: 0 if everything went fine
+    :return: True if everything went fine
     """
     timestamp = time.strftime("%d-%m-%Y") + '_' + time.strftime("%H-%M")
     backup_folder = os.path.expanduser("~/.nuke/snapshotr_backup")
@@ -55,20 +63,31 @@ def backup_current_version():
                      + os.path.expanduser("~/.nuke/snapshotr/")
     if not os.path.exists(backup_folder):
         os.makedirs(backup_folder)
-    return os.system(backup_command)
+    if os.system(backup_command) == 0:
+        return True
 
 
 def check_new_version():
     """
-    :return: True if version at GitHub master branch is > than installed version. None if something wrong.
+    :return: TBD
     """
-    try:
-        response = urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
-        remote_version = ""
-        for ln in response:
-            if "__version__" in ln:
-                remote_version = ln.rstrip()
-        remote_version = remote_version.split("=")[1].translate(None, '"').lstrip()
-        return StrictVersion(remote_version) > StrictVersion(__version__)
-    except:
-        return None
+
+    response = generate_response(type="https")
+    remote_version = ""
+    for ln in response:
+        if "__version__" in ln:
+            remote_version = ln.rstrip()
+    remote_version_https = remote_version.split("=")[1].translate(None, '"').lstrip()
+
+    response = generate_response(type="json")
+    json_data = json.loads(response.read())[0]
+    remote_version_json = str(json_data["name"]).translate(None, "v")
+
+    if StrictVersion(remote_version_https) == StrictVersion(remote_version_json):
+        print "Master branch and release are the same version"
+        if StrictVersion(remote_version_json) > StrictVersion(__version__):
+            return True
+
+
+
+# def download_new_version():

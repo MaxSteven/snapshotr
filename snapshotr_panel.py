@@ -79,7 +79,7 @@ class ssPanel(nukescripts.PythonPanel):
                 if upd.update_message():
                     if upd.check_modules_exist():
                         upd.check_hashes()
-                        if upd.backup_current_version() == 0:
+                        if upd.backup_current_version():
                             print "\n~ Backup complete"
                             # Proceed
                     else:
