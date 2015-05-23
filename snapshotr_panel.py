@@ -14,7 +14,6 @@
 
 __version__ = "0.2.0"
 __release__ = True
-__hash__ = None
 
 import nuke
 import nukescripts
@@ -76,13 +75,15 @@ class ssPanel(nukescripts.PythonPanel):
             """
             Epic function to check for available update
             """
-            if upd.check_modules_exist():
-                upd.check_hashes()
-                if upd.backup_ss() == 0:
-
-                    print "\n~ Backup complete"
-            else:
-                nuke.message('Some modules are missing, please investigate before updating')
+            if upd.check_new_version():
+                if upd.update_message():
+                    if upd.check_modules_exist():
+                        upd.check_hashes()
+                        if upd.backup_current_version() == 0:
+                            print "\n~ Backup complete"
+                            # Proceed
+                    else:
+                        nuke.message('Some modules are missing, please investigate before updating')
 
 
         def snapAutosave():

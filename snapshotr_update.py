@@ -1,14 +1,15 @@
-__hash__ = None
-
 import nuke
 import hashlib
 import os
 import time
+from urllib2 import urlopen
+from distutils.version import StrictVersion
 from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 
-# TODO: Add update_DATETIME.log
+__version__ = "0.1.0"
+__release__ = True
 
 known_modules = {"__init__.py":"d0be737ae58694404a019d52eef22a2c249e9671a8fad41ea7e4eb475aeda2d3",
 "snapshotr_panel.py":"6497cebfb4393db55b93865489c58865b89d70c1adb02936f62a32c3362b7d4c",
@@ -19,9 +20,11 @@ known_modules = {"__init__.py":"d0be737ae58694404a019d52eef22a2c249e9671a8fad41e
 "markup.py":"757e192986642f72cc06f9239711754ac2be1211b3849a12e2438ed58cc77db4",
 "scandir.py":"8b449ac6173f02643761a2d618dfaa928cbbf29f3e679e03fb149e6c047c2562"}
 
+
 def update_message():
-    if nuke.ask('New version of "Snapshotr" found. Would you like to update?'):
+    if nuke.ask('New version of "Snapshotr" found.\nWould you like to update?'):
         return True
+
 
 def check_modules_exist():
     found_modules = []
@@ -32,6 +35,7 @@ def check_modules_exist():
         print "\n~ Starting update, found " + str(len(found_modules)) + " known modules"
         return True
 
+
 def check_hashes():
     for filex in known_modules:
         filex_fullpath = snapr_path + "/" + filex
@@ -40,7 +44,8 @@ def check_hashes():
         else:
             print "! " + filex + " is modified"
 
-def backup_ss():
+
+def backup_current_version():
     """
     :return: 0 if everything went fine
     """
@@ -51,3 +56,19 @@ def backup_ss():
     if not os.path.exists(backup_folder):
         os.makedirs(backup_folder)
     return os.system(backup_command)
+
+
+def check_new_version():
+    """
+    :return: True if version at GitHub master branch is > than installed version. None if something wrong.
+    """
+    try:
+        response = urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
+        remote_version = ""
+        for ln in response:
+            if "__version__" in ln:
+                remote_version = ln.rstrip()
+        remote_version = remote_version.split("=")[1].translate(None, '"').lstrip()
+        return StrictVersion(remote_version) > StrictVersion(__version__)
+    except:
+        return None
