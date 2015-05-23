@@ -1,5 +1,5 @@
 #
-# This should be launched from the python interpreter that is shipped with Nuke
+# This should be launched from the python interpreter that is shipped with Nuke assuming it has py.test installed
 #
 
 import os
