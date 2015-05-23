@@ -14,6 +14,7 @@
 
 __version__ = "0.2.0"
 __release__ = True
+__hash__ = None
 
 import nuke
 import nukescripts
@@ -26,6 +27,8 @@ snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 import snapshotr_webView
 import snapshotr_common as cmn
+import snapshotr_update as upd
+
 
 class ssPanel(nukescripts.PythonPanel):
 
@@ -60,7 +63,7 @@ class ssPanel(nukescripts.PythonPanel):
         self.addKnob(self.timerValue)
         self.addKnob(self.divider)
         self.addKnob(self.markNode)
-        self.timerValue.setValue(60) # 60 minutes by default
+        self.timerValue.setValue(60) # 60 minutes
 
         scriptPath = nuke.toNode('root').knob('name').value()
         scriptName = scriptPath.split("/")[-1]
@@ -68,6 +71,18 @@ class ssPanel(nukescripts.PythonPanel):
         if cmn.check_script(name=scriptName) is None:
             nuke.message("Please save your script in the following format:\nshot.task.artist.v00.00.nk")
             raise BaseException
+
+        def auto_update():
+            """
+            Epic function to check for available update
+            """
+            if upd.check_modules_exist():
+                upd.check_hashes()
+                if upd.backup_ss() == 0:
+
+                    print "\n~ Backup complete"
+            else:
+                nuke.message('Some modules are missing, please investigate before updating')
 
 
         def snapAutosave():
@@ -87,7 +102,8 @@ class ssPanel(nukescripts.PythonPanel):
                 timer = int(self.timerValue.value()) * 60000
                 QtCore.QTimer.singleShot(timer, snapAutosave)
 
-        snapAutosave()
+        # snapAutosave()
+        auto_update()
 
 
     def snap_instant(self):
@@ -118,7 +134,11 @@ class ssPanel(nukescripts.PythonPanel):
                                     fakeFrameRange=c_var["fakeFrameRange"])
         cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText=self.commentField.getText())
 
+
     def prevent_doubleclick(self, time=None):
+        """
+        :param time: Time to lock in ms
+        """
         self.commentField.setValue("")
         self.commentField.setEnabled(False)
         self.btn_open_webview.setEnabled(False)
