@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+# ------------------------------------------------
+# Snapshotr: Nuke snapshots manager
+#
+# Andrew Savchenko © 2014-2015
+# art@artaman.net
+#
+# Attribution 4.0 International (CC BY 4.0)
+# http://creativecommons.org/licenses/by/4.0/
+#
+# Developed on OS X and RHEL, should work on random *nix system
+#
+# ------------------------------------------------
+
 import nuke
 import hashlib
 import os
@@ -9,8 +23,11 @@ from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 
-__version__ = "0.1.0"
-__release__ = True
+#
+# TODO: This should be a class, but in fact it's just a bunch of functions. What a shame.
+#
+
+__version__ = "0.1.0" # TODO: Finally move this in one place and stop defining in every module
 
 known_modules = {"__init__.py":"d0be737ae58694404a019d52eef22a2c249e9671a8fad41ea7e4eb475aeda2d3",
 "snapshotr_panel.py":"6497cebfb4393db55b93865489c58865b89d70c1adb02936f62a32c3362b7d4c",
@@ -88,7 +105,7 @@ def check_new_version():
             remote_version = ln.rstrip()
     remote_version_https = remote_version.split("=")[1].translate(None, '"').lstrip()
 
-    json_parsed = get_json() # TODO: This should be called only once
+    json_parsed = get_json()
 
     if StrictVersion(remote_version_https) == StrictVersion(json_parsed["version"]):
         print "Master branch and release are the same version"
@@ -110,4 +127,4 @@ def download_new_version():
         nuke.message("Can't save the file")
 
 def extract_new_version():
-    pass # TODO: Create a class with var's, put all funct's inside and update var's when needed
+    pass
