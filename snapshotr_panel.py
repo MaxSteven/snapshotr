@@ -80,8 +80,10 @@ class ssPanel(nukescripts.PythonPanel):
                     if upd.check_modules_exist():
                         upd.check_hashes()
                         if upd.backup_current_version():
-                            print "\n~ Backup complete"
-                            # Proceed
+                            print "~ Backup complete"
+                            if upd.download_new_version():
+                                print "~ New version downloaded"
+
                     else:
                         nuke.message('Some modules are missing, please investigate before updating')
 

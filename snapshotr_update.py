@@ -2,7 +2,7 @@ import nuke
 import hashlib
 import os
 import time
-from urllib2 import urlopen
+from urllib import urlopen, urlretrieve
 import json
 from distutils.version import StrictVersion
 from sys import path
@@ -20,13 +20,6 @@ known_modules = {"__init__.py":"d0be737ae58694404a019d52eef22a2c249e9671a8fad41e
 "test_init.py":"e9441574ec8df74423805a208a57c652d879ead7110aa10cc8ba5f5d8e863a33",
 "markup.py":"757e192986642f72cc06f9239711754ac2be1211b3849a12e2438ed58cc77db4",
 "scandir.py":"8b449ac6173f02643761a2d618dfaa928cbbf29f3e679e03fb149e6c047c2562"}
-
-
-def generate_response(type=None):
-    if type == "https":
-        return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
-    if type == "json":
-        return urlopen("https://api.github.com/repos/artaman/snapshotr/releases")
 
 
 def update_message():
@@ -67,11 +60,27 @@ def backup_current_version():
         return True
 
 
+def generate_response(type=None):
+    if type == "https":
+        return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
+    if type == "json":
+        return urlopen("https://api.github.com/repos/artaman/snapshotr/releases/latest")
+
+
+def get_json():
+    json_parsed = {}
+    response = generate_response(type="json")
+    json_data = json.loads(response.read())[0]
+    remote_version_json = str(json_data["name"]).translate(None, "v")
+    download_link = str(json_data["zipball_url"])
+    json_parsed.update({"version":remote_version_json, "download_link":download_link})
+    return json_parsed
+
+
 def check_new_version():
     """
     :return: TBD
     """
-
     response = generate_response(type="https")
     remote_version = ""
     for ln in response:
@@ -79,15 +88,26 @@ def check_new_version():
             remote_version = ln.rstrip()
     remote_version_https = remote_version.split("=")[1].translate(None, '"').lstrip()
 
-    response = generate_response(type="json")
-    json_data = json.loads(response.read())[0]
-    remote_version_json = str(json_data["name"]).translate(None, "v")
+    json_parsed = get_json() # TODO: This should be called only once
 
-    if StrictVersion(remote_version_https) == StrictVersion(remote_version_json):
+    if StrictVersion(remote_version_https) == StrictVersion(json_parsed["version"]):
         print "Master branch and release are the same version"
-        if StrictVersion(remote_version_json) > StrictVersion(__version__):
+        if StrictVersion(json_parsed["version"]) > StrictVersion(__version__):
             return True
 
 
+def download_new_version():
+    json_parsed = get_json()
+    link = json_parsed["download_link"]
+    new_version_path = "/".join(os.path.expanduser(snapr_path).split("/")[:-1]) + \
+                       "/snapshotr_v" + json_parsed["version"] + ".zip"
+    try:
+        print link, new_version_path
+        urlretrieve(url=link, filename=new_version_path)
+        print "Save OK"
+        return True
+    except:
+        nuke.message("Can't save the file")
 
-# def download_new_version():
+def extract_new_version():
+    pass # TODO: Create a class with var's, put all funct's inside and update var's when needed
