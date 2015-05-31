@@ -29,14 +29,14 @@ snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 import markup, scandir
 
-def updateWebView(debug=0, s_dirs=None):
+def updateWebView(debug=0, s_dirs=None, shot_title=None):
     """
     :rtype : hmtl code of web-view as list object
     """
     genStart = time.time()
     page = markup.page()
 
-    title = "Snapshot viewer"
+    title = "ss :: " + shot_title
     scriptPath = str(os.path.dirname(os.path.abspath(__file__)))
     header = "<script src='" + scriptPath + "/bootstrap/js/jquery-2.1.1.min.js'></script>" \
              + "<script src='" + scriptPath + "/bootstrap/js/bootstrap.min.js'></script>" \

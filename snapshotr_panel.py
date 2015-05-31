@@ -105,7 +105,7 @@ class ssPanel(nukescripts.PythonPanel):
                 QtCore.QTimer.singleShot(timer, snapAutosave)
 
         # snapAutosave()
-        auto_update()
+        # auto_update()
 
 
     def snap_instant(self):
@@ -163,17 +163,18 @@ class ssPanel(nukescripts.PythonPanel):
         pFile = str(scriptName).split(".")
         pFile = "_".join(pFile[0:2])
         pFile = self.snapsDir + "/" + pFile + ".html"
+        shot_name = scriptName.split(".")[0]
 
         if knob is self.btn_snap_fullres:
+            self.prevent_doubleclick(time=1000)
             self.snap_fullres()
-            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
+            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir, shot_title=shot_name)
             cmn.write_html(pFile=pFile, html=webview_html)
-            self.prevent_doubleclick(time=2000)
         elif knob is self.btn_snap_instant:
+            self.prevent_doubleclick(time=1000)
             self.snap_instant()
-            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir)
+            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir, shot_title=shot_name)
             cmn.write_html(pFile=pFile, html=webview_html)
-            self.prevent_doubleclick(time=2000)
         elif knob is self.btn_open_webview:
             webbrowser.open('file://' + os.path.realpath(pFile), new=2, autoraise=True)
         elif knob is self.timerValue:
