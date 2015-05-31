@@ -77,7 +77,8 @@ class ssPanel(nukescripts.PythonPanel):
             if upd.check_new_version():
                 if upd.update_message():
                     if upd.check_modules_exist():
-                        upd.check_hashes()
+                        hash_checker = upd.CheckHashes()
+                        hash_checker.validate_hashes(ss_path=snapr_path)
                         if upd.backup_current_version():
                             print "~ Backup complete"
                             if upd.download_new_version():
@@ -105,7 +106,7 @@ class ssPanel(nukescripts.PythonPanel):
                 QtCore.QTimer.singleShot(timer, snapAutosave)
 
         # snapAutosave()
-        # auto_update()
+        auto_update()
 
 
     def snap_instant(self):

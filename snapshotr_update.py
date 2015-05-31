@@ -23,21 +23,7 @@ from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 
-#
-# TODO: This should be a class, but in fact it's just a bunch of functions. What a shame.
-#
-
 __version__ = "0.1.0" # TODO: Finally move this in one place and stop defining in every module
-
-known_modules = {"__init__.py":"d0be737ae58694404a019d52eef22a2c249e9671a8fad41ea7e4eb475aeda2d3",
-"snapshotr_panel.py":"6497cebfb4393db55b93865489c58865b89d70c1adb02936f62a32c3362b7d4c",
-"snapshotr_update.py":"2c25db6b2aabcaacbdd2d4a4624976a21a552432de87f0166e9274fed27c2732",
-"snapshotr_webView.py":"e5cfbe8547bb7767cc7665e6e01da74cb4a6a73c48d1c252d09de79339965dd1",
-"snapshotr_common.py":"95b3c0c25bacb2c5f106083a410e5db20647fa0265128e93e76a7e19edc485b2",
-"test_init.py":"e9441574ec8df74423805a208a57c652d879ead7110aa10cc8ba5f5d8e863a33",
-"markup.py":"757e192986642f72cc06f9239711754ac2be1211b3849a12e2438ed58cc77db4",
-"scandir.py":"8b449ac6173f02643761a2d618dfaa928cbbf29f3e679e03fb149e6c047c2562"}
-
 
 def update_message():
     if nuke.ask('New version of "Snapshotr" found.\nWould you like to update?'):
@@ -54,13 +40,27 @@ def check_modules_exist():
         return True
 
 
-def check_hashes():
-    for filex in known_modules:
-        filex_fullpath = snapr_path + "/" + filex
-        if known_modules[filex] == hashlib.sha256(open(filex_fullpath, 'rb').read()).hexdigest():
-            print "* " + filex + " is OK"
-        else:
-            print "! " + filex + " is modified"
+class CheckHashes():
+    def __init__(self):
+        self.hashes_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/snapshotr_hashes.json"
+
+    def read_hashes(self):
+        if os.access(self.hashes_path, os.R_OK):
+            with open(self.hashes_path) as fp:
+                return fp.read()
+        return None
+
+    def validate_hashes(self, ss_path=None):
+        hashes_json = self.read_hashes()
+        hashes_parsed = json.loads(hashes_json)
+        if isinstance(hashes_parsed, dict):
+            for module, hash in hashes_parsed.iteritems():
+                module_path = ss_path + "/" + module
+                if hashes_parsed[module] == hashlib.sha256(open(module_path, 'rb').read()).hexdigest():
+                    # Should pass to logging in the future
+                    print "* " + module + " is OK"
+                else:
+                    print "! " + module + " is modified"
 
 
 def backup_current_version():
@@ -77,35 +77,36 @@ def backup_current_version():
         return True
 
 
-def generate_response(type=None):
-    if type == "https":
+def generate_response(what=None):
+    if what == "https":
         return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
-    if type == "json":
+    if what == "json":
         return urlopen("https://api.github.com/repos/artaman/snapshotr/releases/latest")
 
 
-def get_json():
-    json_parsed = {}
-    response = generate_response(type="json")
-    json_data = json.loads(response.read())[0]
+json_parsed = {}
+
+def get_json(out=json_parsed):
+    response = generate_response(what="json")
+    json_data = json.loads(response.read())
     remote_version_json = str(json_data["name"]).translate(None, "v")
     download_link = str(json_data["zipball_url"])
-    json_parsed.update({"version":remote_version_json, "download_link":download_link})
-    return json_parsed
+    out.update({"version":remote_version_json, "download_link":download_link})
+    return out
 
 
 def check_new_version():
     """
     :return: TBD
     """
-    response = generate_response(type="https")
+    response = generate_response(what="https")
     remote_version = ""
     for ln in response:
         if "__version__" in ln:
             remote_version = ln.rstrip()
     remote_version_https = remote_version.split("=")[1].translate(None, '"').lstrip()
 
-    json_parsed = get_json()
+    get_json()
 
     if StrictVersion(remote_version_https) == StrictVersion(json_parsed["version"]):
         print "Master branch and release are the same version"
@@ -114,17 +115,20 @@ def check_new_version():
 
 
 def download_new_version():
-    json_parsed = get_json()
     link = json_parsed["download_link"]
-    new_version_path = "/".join(os.path.expanduser(snapr_path).split("/")[:-1]) + \
-                       "/snapshotr_v" + json_parsed["version"] + ".zip"
+    new_version_folder = "/".join(os.path.expanduser(snapr_path).split("/")[:-1]) + \
+                       "/snapshotr_versions"
+    new_version_path = new_version_folder + "/snapshotr_v" + json_parsed["version"] + ".zip"
+    if not os.path.exists(new_version_folder):
+        try:
+            os.makedirs(new_version_folder)
+        except OSError, e:
+            nuke.message("Can't create folder: %s" %e)
     try:
-        print link, new_version_path
         urlretrieve(url=link, filename=new_version_path)
-        print "Save OK"
         return True
-    except:
-        nuke.message("Can't save the file")
+    except OSError, e:
+        nuke.message("Can't save the file: %s" %e)
 
 def extract_new_version():
     pass
