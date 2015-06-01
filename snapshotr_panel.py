@@ -76,16 +76,14 @@ class ssPanel(nukescripts.PythonPanel):
             """
             if upd.check_new_version():
                 if upd.update_message():
-                    if upd.check_modules_exist():
-                        hash_checker = upd.CheckHashes()
-                        hash_checker.validate_hashes(ss_path=snapr_path)
-                        if upd.backup_current_version():
-                            print "~ Backup complete"
-                            if upd.download_new_version():
-                                print "~ New version downloaded"
-
-                    else:
-                        nuke.message('Some modules are missing, please investigate before updating')
+                    hash_checker = upd.CheckHashes()
+                    hash_checker.validate_hashes(ss_path=snapr_path)
+                    if upd.backup_current_version():
+                        print "~ Backup complete"
+                        if upd.download_new_version():
+                            print "~ New version downloaded"
+                            if upd.git_new_version():
+                                print "~ Snapshotr updated! Please restart Nuke."
 
 
         def snapAutosave():

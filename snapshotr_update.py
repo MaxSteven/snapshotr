@@ -16,33 +16,26 @@ import nuke
 import hashlib
 import os
 import time
-from urllib import urlopen, urlretrieve
 import json
+from sys import argv
+from urllib import urlopen, urlretrieve
 from distutils.version import StrictVersion
 from sys import path
 snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
 path.append(snapr_path)
 
-__version__ = "0.1.0" # TODO: Finally move this in one place and stop defining in every module
+__version__ = "0.1.0"
+
+json_parsed = {}
 
 def update_message():
+    #TODO: Add message "What's updated in the new version"
     if nuke.ask('New version of "Snapshotr" found.\nWould you like to update?'):
         return True
 
-
-def check_modules_exist():
-    found_modules = []
-    for filex in os.listdir(snapr_path):
-        if filex in known_modules:
-            found_modules.append(filex)
-    if len(known_modules) == len(found_modules):
-        print "\n~ Starting update, found " + str(len(found_modules)) + " known modules"
-        return True
-
-
 class CheckHashes():
     def __init__(self):
-        self.hashes_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/snapshotr_hashes.json"
+        self.hashes_path = os.path.dirname(os.path.realpath(argv[0])) + "/snapshotr_hashes.json"
 
     def read_hashes(self):
         if os.access(self.hashes_path, os.R_OK):
@@ -54,13 +47,14 @@ class CheckHashes():
         hashes_json = self.read_hashes()
         hashes_parsed = json.loads(hashes_json)
         if isinstance(hashes_parsed, dict):
-            for module, hash in hashes_parsed.iteritems():
+            for module in hashes_parsed.iteritems():
                 module_path = ss_path + "/" + module
-                if hashes_parsed[module] == hashlib.sha256(open(module_path, 'rb').read()).hexdigest():
-                    # Should pass to logging in the future
-                    print "* " + module + " is OK"
-                else:
-                    print "! " + module + " is modified"
+                if os.path.isfile(module_path):
+                    if hashes_parsed[module] == hashlib.sha256(open(module_path, 'rb').read()).hexdigest():
+                        #TODO: Pass to logging in the future
+                        print "* %s is OK" %module
+                    print "! %s is modified" %module
+                print "%s not found (but expected to be)" %module
 
 
 def backup_current_version():
@@ -72,34 +66,37 @@ def backup_current_version():
     backup_command = "zip -r " + backup_folder + "/backup_" + timestamp + ".zip "\
                      + os.path.expanduser("~/.nuke/snapshotr/")
     if not os.path.exists(backup_folder):
-        os.makedirs(backup_folder)
+        try:
+            os.makedirs(backup_folder)
+        except OSError, e:
+            nuke.message("Can't create folder: %s" %e)
     if os.system(backup_command) == 0:
         return True
 
 
-def generate_response(what=None):
-    if what == "https":
+def generate_response(source=None):
+    if source == "https":
         return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
-    if what == "json":
+    if source == "json":
         return urlopen("https://api.github.com/repos/artaman/snapshotr/releases/latest")
 
 
-json_parsed = {}
-
 def get_json(out=json_parsed):
-    response = generate_response(what="json")
+    #TODO: Add JSON validation
+    response = generate_response(source="json")
     json_data = json.loads(response.read())
-    remote_version_json = str(json_data["name"]).translate(None, "v")
-    download_link = str(json_data["zipball_url"])
-    out.update({"version":remote_version_json, "download_link":download_link})
-    return out
+    if json_data:
+        remote_version_json = str(json_data["name"]).translate(None, "v")
+        download_link = str(json_data["zipball_url"])
+        out.update({"version":remote_version_json, "download_link":download_link})
+        return out
 
 
 def check_new_version():
     """
-    :return: TBD
+    :return: True if everything OK
     """
-    response = generate_response(what="https")
+    response = generate_response(source="https")
     remote_version = ""
     for ln in response:
         if "__version__" in ln:
@@ -108,10 +105,11 @@ def check_new_version():
 
     get_json()
 
-    if StrictVersion(remote_version_https) == StrictVersion(json_parsed["version"]):
-        print "Master branch and release are the same version"
-        if StrictVersion(json_parsed["version"]) > StrictVersion(__version__):
-            return True
+    if json_parsed:
+        if StrictVersion(remote_version_https) == StrictVersion(json_parsed["version"]):
+            print "Master branch and release are synced, processing..."
+            if StrictVersion(json_parsed["version"]) > StrictVersion(__version__):
+                return True
 
 
 def download_new_version():
@@ -130,5 +128,7 @@ def download_new_version():
     except OSError, e:
         nuke.message("Can't save the file: %s" %e)
 
-def extract_new_version():
-    pass
+def git_new_version():
+    git_command = "cd %s && git pull https://github.com/artaman/snapshotr.git ." %snapr_path
+    if os.system(git_command) == 0:
+        return True
