@@ -1,3 +1,5 @@
+###### Please note, development is happening in the 'develop' branch
+
 ## What is it?
 This is a Nuke snapshot manager which is used to make script versioning more straightforward
 
