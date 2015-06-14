@@ -15,11 +15,9 @@
 
 import nuke
 import nukescripts
-import os
 from sys import path
-
-snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
-path.append(snapr_path)
+from .snapshotr_settings import *
+path.append(SS_PATH)
 
 if nuke.GUI:
     def addSSpanel():

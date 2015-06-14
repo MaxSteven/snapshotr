@@ -14,17 +14,13 @@
 
 import nuke
 import hashlib
-import os
 import time
 import json
-from sys import argv
 from urllib import urlopen, urlretrieve
 from distutils.version import StrictVersion
 from sys import path
-snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
-path.append(snapr_path)
-
-__version__ = "0.1.0"
+from .snapshotr_settings import *
+path.append(SS_PATH)
 
 json_parsed = {}
 
@@ -32,27 +28,15 @@ def update_message():
     if nuke.ask('New version of "Snapshotr" found.\nWould you like to update?'):
         return True
 
-class CheckHashes:
-    def __init__(self):
-        self.hashes_path = os.path.dirname(os.path.realpath(argv[0])) + "/snapshotr_hashes.json"
 
-    def read_hashes(self):
-        if os.access(self.hashes_path, os.R_OK):
-            with open(self.hashes_path) as fp:
-                return fp.read()
-        return None
-
-    def validate_hashes(self, ss_path=None):
-        hashes_json = self.read_hashes()
-        hashes_parsed = json.loads(hashes_json)
-        if isinstance(hashes_parsed, dict):
-            for module in hashes_parsed.iteritems():
-                module_path = ss_path + "/" + module
-                if os.path.isfile(module_path):
-                    if hashes_parsed[module] == hashlib.sha256(open(module_path, 'rb').read()).hexdigest():
-                        print "* %s is OK" %module
-                    print "! %s is modified" %module
-                print "%s not found (but expected to be)" %module
+def check_hashes():
+    for ss_module in HASHES:
+        module_path = SS_PATH + "/" + ss_module
+        if os.path.isfile(module_path):
+            if HASHES[ss_module] == hashlib.sha256(open(module_path, 'rb').read()).hexdigest():
+                print "* %s is OK" %ss_module
+            print "! %s is modified" %ss_module
+        print "%s not found (but expected to be)" %ss_module
 
 
 def backup_current_version():
@@ -74,7 +58,7 @@ def backup_current_version():
 
 def generate_response(source=None):
     if source == "https":
-        return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/__init__.py")
+        return urlopen("https://raw.githubusercontent.com/artaman/snapshotr/master/settings.py")
     if source == "json":
         return urlopen("https://api.github.com/repos/artaman/snapshotr/releases/latest")
 
@@ -99,16 +83,16 @@ def check_new_version():
     response = generate_response(source="https")
     remote_version = ""
     for ln in response:
-        if "__version__" in ln:
+        if "version" in ln:
             remote_version = ln.rstrip()
-    remote_version_https = remote_version.split("=")[1].translate(None, '"').lstrip()
+    remote_version_https = remote_version.split(":")[1].lstrip()
 
     get_json()
 
     if json_parsed:
         if StrictVersion(remote_version_https) == StrictVersion(json_parsed["version"]):
             print "Master branch and release are synced, processing..."
-            if StrictVersion(json_parsed["version"]) > StrictVersion(__version__):
+            if StrictVersion(json_parsed["version"]) > StrictVersion(VERSION):
                 return True
 
 

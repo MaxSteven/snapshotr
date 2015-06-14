@@ -14,23 +14,20 @@
 
 import nuke
 import nukescripts
-import os
 import webbrowser
 # noinspection PyUnresolvedReferences
 from PySide import QtCore
 from sys import path
-snapr_path = os.getenv("HOME") + "/.nuke/snapshotr"
-path.append(snapr_path)
+from .snapshotr_settings import *
+path.append(SS_PATH)
 import snapshotr_webView
 import snapshotr_common as cmn
 import snapshotr_update as upd
 
 class ssPanel(nukescripts.PythonPanel):
 
-    DEV = 0
     rootDir = nuke.script_directory()
     snapsDir = rootDir + "/snaps"
-
 
     def __init__(self):
         nukescripts.PythonPanel.__init__(
@@ -38,7 +35,7 @@ class ssPanel(nukescripts.PythonPanel):
             'Snapshotr',
             'uk.co.thefoundry.ssPanel')
 
-        if self.DEV > 0:
+        if DEBUG > 0:
             print "\n* Debug mode ON"
             print "* rootDir inside ssPanel __init__ = " + self.rootDir
             print "* snapsDir inside ssPanel __init__ = " + self.snapsDir
@@ -73,14 +70,13 @@ class ssPanel(nukescripts.PythonPanel):
             """
             if upd.check_new_version():
                 if upd.update_message():
-                    hash_checker = upd.CheckHashes()
-                    hash_checker.validate_hashes(ss_path=snapr_path)
+                    upd.check_hashes()
                     if upd.backup_current_version():
                         print "~ Backup complete"
                         if upd.download_new_version():
                             print "~ New version downloaded"
                             if upd.git_new_version():
-                                print "~ Snapshotr updated! Please restart Nuke."
+                                nuke.message("Snapshotr updated!\nPlease restart Nuke.")
 
 
         def snapAutosave():
@@ -95,13 +91,13 @@ class ssPanel(nukescripts.PythonPanel):
                 cmn.create_snapshot_script(scriptPath=c_var["scriptPath"], snapScriptName=c_var["snapScriptName"],
                                            upversion=False)
                 cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText="#autosnap")
-                cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
+                cmn.create_snapshot_screenshot(DEV=DEBUG, snapImageFile=c_var["snapImageFile"])
             finally:
                 timer = int(self.timerValue.value()) * 60000
                 QtCore.QTimer.singleShot(timer, snapAutosave)
 
-        # snapAutosave()
-        auto_update()
+        if CONF_AUTOSNAP: snapAutosave()
+        if CONF_UPDATE: auto_update()
 
 
     def snap_instant(self):
@@ -115,7 +111,7 @@ class ssPanel(nukescripts.PythonPanel):
                                    upversion=True)
         cmn.label_node(markNode=self.markNode, nodeLabel=c_var["nodeLabel"])
         cmn.create_snapshot_comment(snapCommentFile=c_var["snapCommentFile"], commentText=self.commentField.getText())
-        cmn.create_snapshot_screenshot(DEV=self.DEV, snapImageFile=c_var["snapImageFile"])
+        cmn.create_snapshot_screenshot(DEV=DEBUG, snapImageFile=c_var["snapImageFile"])
 
 
     def snap_fullres(self):
@@ -164,12 +160,12 @@ class ssPanel(nukescripts.PythonPanel):
         if knob is self.btn_snap_fullres:
             self.prevent_doubleclick(time=1000)
             self.snap_fullres()
-            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir, shot_title=shot_name)
+            webview_html = snapshotr_webView.updateWebView(debug=DEBUG, s_dirs=self.snapsDir, shot_title=shot_name)
             cmn.write_html(pFile=pFile, html=webview_html)
         elif knob is self.btn_snap_instant:
             self.prevent_doubleclick(time=1000)
             self.snap_instant()
-            webview_html = snapshotr_webView.updateWebView(debug=self.DEV, s_dirs=self.snapsDir, shot_title=shot_name)
+            webview_html = snapshotr_webView.updateWebView(debug=DEBUG, s_dirs=self.snapsDir, shot_title=shot_name)
             cmn.write_html(pFile=pFile, html=webview_html)
         elif knob is self.btn_open_webview:
             webbrowser.open('file://' + os.path.realpath(pFile), new=2, autoraise=True)
@@ -178,5 +174,3 @@ class ssPanel(nukescripts.PythonPanel):
                 self.timerValue.setValue(10)
             elif self.timerValue.value() > 60:
                 self.timerValue.setValue(60)
-        else:
-            pass
