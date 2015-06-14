@@ -12,8 +12,6 @@
 #
 # ------------------------------------------------
 
-__version__ = "0.2.0"
-
 import nuke
 import nukescripts
 import os
@@ -26,7 +24,6 @@ path.append(snapr_path)
 import snapshotr_webView
 import snapshotr_common as cmn
 import snapshotr_update as upd
-
 
 class ssPanel(nukescripts.PythonPanel):
 

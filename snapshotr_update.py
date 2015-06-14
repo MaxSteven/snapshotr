@@ -29,11 +29,10 @@ __version__ = "0.1.0"
 json_parsed = {}
 
 def update_message():
-    #TODO: Add message "What's updated in the new version"
     if nuke.ask('New version of "Snapshotr" found.\nWould you like to update?'):
         return True
 
-class CheckHashes():
+class CheckHashes:
     def __init__(self):
         self.hashes_path = os.path.dirname(os.path.realpath(argv[0])) + "/snapshotr_hashes.json"
 
@@ -51,7 +50,6 @@ class CheckHashes():
                 module_path = ss_path + "/" + module
                 if os.path.isfile(module_path):
                     if hashes_parsed[module] == hashlib.sha256(open(module_path, 'rb').read()).hexdigest():
-                        #TODO: Pass to logging in the future
                         print "* %s is OK" %module
                     print "! %s is modified" %module
                 print "%s not found (but expected to be)" %module
@@ -82,9 +80,11 @@ def generate_response(source=None):
 
 
 def get_json(out=json_parsed):
-    #TODO: Add JSON validation
     response = generate_response(source="json")
-    json_data = json.loads(response.read())
+    try:
+        json_data = json.loads(response.read())
+    except ValueError, e:
+        raise e
     if json_data:
         remote_version_json = str(json_data["name"]).translate(None, "v")
         download_link = str(json_data["zipball_url"])
