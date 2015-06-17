@@ -15,7 +15,6 @@
 
 import nuke
 import nukescripts
-from sys import path
 from .snapshotr_settings import *
 path.append(SS_PATH)
 

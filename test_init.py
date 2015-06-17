@@ -3,21 +3,18 @@
 #
 
 import os
-from . import snapr_path
+from .snapshotr_settings import *
 import snapshotr_common as cmn
 
 class TestCommons:
     def test_correct_installation(self):
-        assert os.path.exists(snapr_path)
-        assert os.path.isfile(snapr_path + "/markup.py")
-        assert os.path.isfile(snapr_path + "/scandir.py")
-        assert os.path.isfile(snapr_path + "/snapshotr_webview.py")
-        assert os.path.isfile(snapr_path + "/snapshotr_panel.py")
-        assert os.path.isfile(snapr_path + "/snapshotr_common.py")
+        assert os.path.exists(SS_PATH)
+        assert os.path.isfile(SS_PATH + "/markup.py")
+        assert os.path.isfile(SS_PATH + "/scandir.py")
+        assert os.path.isfile(SS_PATH + "/snapshotr_webview.py")
+        assert os.path.isfile(SS_PATH + "/snapshotr_panel.py")
+        assert os.path.isfile(SS_PATH + "/snapshotr_common.py")
 
     def test_script_name_checking(self):
         assert cmn.check_script("ss0001.comp.username.v01.00.nk") is not None
         assert cmn.check_script("ss0001.comp-user.v01.00.nk") is None
-
-
-

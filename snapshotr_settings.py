@@ -18,5 +18,3 @@ HASHES = {}
 for module, sha in settings.items('hashes'):
     HASHES.update({module:sha})
 SS_PATH = snapr_path
-
-

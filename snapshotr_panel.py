@@ -17,7 +17,6 @@ import nukescripts
 import webbrowser
 # noinspection PyUnresolvedReferences
 from PySide import QtCore
-from sys import path
 from .snapshotr_settings import *
 path.append(SS_PATH)
 import snapshotr_webView
