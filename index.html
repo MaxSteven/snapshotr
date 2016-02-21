@@ -2,10 +2,10 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Snapshotr by artaman</title>
+    <title>Snapshotr by asvc</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -13,25 +13,25 @@
     <section class="page-header">
       <h1 class="project-name">Snapshotr</h1>
       <h2 class="project-tagline">Nuke snapshot manager</h2>
-      <a href="https://github.com/artaman/snapshotr" class="btn">View on GitHub</a>
-      <a href="https://github.com/artaman/snapshotr/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/artaman/snapshotr/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://github.com/asvc/snapshotr" class="btn">View on GitHub</a>
+      <a href="https://github.com/asvc/snapshotr/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/asvc/snapshotr/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
       <h2>
-<a id="what-is-it" class="anchor" href="#what-is-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is it?</h2>
+<a id="what-is-it" class="anchor" href="#what-is-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is it?</h2>
 
 <p>This is a Nuke snapshot manager which is used to make script versioning more straightforward</p>
 
 <h2>
-<a id="what-is-snapshot" class="anchor" href="#what-is-snapshot" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is snapshot?</h2>
+<a id="what-is-snapshot" class="anchor" href="#what-is-snapshot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is snapshot?</h2>
 
 <p>It is a backup of script at the specific time with user comment and screenshot<br>
 All snapshots are presented in user friendly web-interface</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
 <ol>
 <li><code>cd ~/.nuke &amp;&amp; git clone https://github.com/artaman/snapshotr.git</code></li>
@@ -39,27 +39,27 @@ All snapshots are presented in user friendly web-interface</p>
 <li>Add the following code:</li>
 </ol>
 
-<div class="highlight highlight-python"><pre><span class="pl-c">#</span>
+<div class="highlight highlight-source-python"><pre><span class="pl-c">#</span>
 <span class="pl-c"># Snapshotr</span>
 <span class="pl-c">#</span>
 <span class="pl-k">import</span> os, nuke
 snapr_path <span class="pl-k">=</span> os.getenv(<span class="pl-s"><span class="pl-pds">"</span>HOME<span class="pl-pds">"</span></span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>/.nuke<span class="pl-pds">"</span></span>
 <span class="pl-k">if</span> os.path.exists(snapr_path <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>/snapshotr<span class="pl-pds">"</span></span>):
     nuke.pluginAddPath(snapr_path)
-    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>~ Loading Snapshotr into the Nuke...<span class="pl-pds">"</span></span>
+    <span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>~ Loading Snapshotr into the Nuke...<span class="pl-pds">"</span></span>
     <span class="pl-k">import</span> snapshotr
 <span class="pl-k">else</span>:
-    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>! Snapshotr path can't be found, going on...<span class="pl-pds">"</span></span></pre></div>
+    <span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>! Snapshotr path can't be found, going on...<span class="pl-pds">"</span></span></pre></div>
 
 <h2>
-<a id="file-versioning" class="anchor" href="#file-versioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>File versioning</h2>
+<a id="file-versioning" class="anchor" href="#file-versioning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>File versioning</h2>
 
 <p>This tool assumes that artist uses the following convention in naming scripts: <em>shot.user.task.v01.00.nk</em><br>
 In case file is saved with incorrect name, it will display a warning message and panel will not load<br>
 Each snapshot increases minor version by one (e.g v01.00 --&gt; v01.01)</p>
 
 <h2>
-<a id="nuke-panel" class="anchor" href="#nuke-panel" aria-hidden="true"><span class="octicon octicon-link"></span></a>Nuke panel</h2>
+<a id="nuke-panel" class="anchor" href="#nuke-panel" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Nuke panel</h2>
 
 <p>After following steps above you will have a new panel called "Snapshotr"<br>
 By default it is dockable, but it can be dragged out and used as a modal window:</p>
@@ -83,7 +83,7 @@ will be converted to sRGB prior to render</li>
 </ul>
 
 <h2>
-<a id="web-view" class="anchor" href="#web-view" aria-hidden="true"><span class="octicon octicon-link"></span></a>Web view</h2>
+<a id="web-view" class="anchor" href="#web-view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Web view</h2>
 
 <p>Here is an example of a web page generated each time user manually initiated snapshot creation:</p>
 
@@ -92,7 +92,7 @@ will be converted to sRGB prior to render</li>
 <p>By default snapshots are sorted from new to old, this can be changed by clicking "Time created" column header. Clicking "nk" button user can see a box with path to the .nk script. Clicking the image thumbnail, full-res version will be opened (limited to the screen width).</p>
 
 <h2>
-<a id="file-structure" class="anchor" href="#file-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>File structure</h2>
+<a id="file-structure" class="anchor" href="#file-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>File structure</h2>
 
 <p><img src="https://cloud.githubusercontent.com/assets/300146/7670600/30f23a6e-fcdd-11e4-870e-fcff797d8232.png" alt="v020_filelist"></p>
 
@@ -100,7 +100,7 @@ will be converted to sRGB prior to render</li>
 After writing files to the filesystem they are chmod'ed to 0444  </p>
 
 <h2>
-<a id="debugging" class="anchor" href="#debugging" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging</h2>
+<a id="debugging" class="anchor" href="#debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugging</h2>
 
 <p><img src="https://cloud.githubusercontent.com/assets/300146/7670615/bd4a68e2-fcdd-11e4-940d-21498f9686ab.png" alt="v020_debug"></p>
 
@@ -108,12 +108,12 @@ After writing files to the filesystem they are chmod'ed to 0444  </p>
 If you want more, change <code>DEV</code> variable to 1 or 2 (last one will output a lot)</p>
 
 <h2>
-<a id="performance" class="anchor" href="#performance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Performance</h2>
+<a id="performance" class="anchor" href="#performance" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Performance</h2>
 
 <p>On typical workstation this tool parses ~200 snapshots to the web-view per second</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/artaman/snapshotr">Snapshotr</a> is maintained by <a href="https://github.com/artaman">artaman</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/asvc/snapshotr">Snapshotr</a> is maintained by <a href="https://github.com/asvc">asvc</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
@@ -123,4 +123,3 @@ If you want more, change <code>DEV</code> variable to 1 or 2 (last one will outp
   
   </body>
 </html>
-
