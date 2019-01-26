@@ -3,7 +3,7 @@
 # Snapshotr: Nuke snapshots manager
 #
 # Andrew Savchenko © 2014-2015
-# art@artaman.net
+# andrew@savchenko.net
 #
 # Attribution 4.0 International (CC BY 4.0)
 # http://creativecommons.org/licenses/by/4.0/

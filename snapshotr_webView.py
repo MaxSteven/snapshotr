@@ -3,7 +3,7 @@
 # Snapshotr: Nuke snapshots manager
 #
 # Andrew Savchenko © 2014-2015
-# art@artaman.net
+# andrew@savchenko.net
 #
 # Attribution 4.0 International (CC BY 4.0)
 # http://creativecommons.org/licenses/by/4.0/
@@ -262,7 +262,7 @@ def updateWebView(debug=0, s_dirs=None):
                   </div> \n\
                   <div class="modal-body"> \n\
                     <p>This is <b>Snapshotr</b>, Nuke snapshot manager.<br />Pet project for November 2014, developed whenever I have free time and some coffee.</p> \n\
-                    <p>If you have any questions, feel free to write me at <a href="mailto:art@artaman.net?Subject=Snapshotr" target="_top">art@artaman.net</a></p> \n\
+                    <p>If you have any questions, feel free to write me at <a href="mailto:andrew@savchenko.net?Subject=Snapshotr" target="_top">andrew@savchenko.net</a></p> \n\
                     <p></p> \n\
                   </div> \n\
                   <div class="modal-footer"> \n\
